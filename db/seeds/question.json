@@ -1,0 +1,1286 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(2つ選択)",
+      "code": "class Stack\n  def initialize\n    @contents = []\n  end\n\n  __(1)__\nend\n\nstack = Stack.new\nstack.push(\"foo\")\nstack.push(\"bar\")\np stack.pop\n\n[実行結果]\n\"bar\"",
+      "correct_answer": "A, D",
+      "explanation": "Module#define_methodはレシーバにインスタンスメソッドを定義します。BasicObject#instance_evalではdefは特異メソッドを定義しますが、Module#class_evalではインスタンスメソッドを定義します。",
+      "options": [
+        {
+          "content": "[:push, :pop].each do |name|\n  define_method(name) do |*args|\n    @contents.send(name, *args)\n  end\nend",
+          "label": "A"
+        },
+        {
+          "content": "for name in [:push, :pop]\n  define_method(name) do |*args|\n    @contents.send(name, *args)\n  end\nend",
+          "label": "B"
+        },
+        {
+          "content": "[:push, :pop].each do |name|\n  instance_eval(<<-EOF)\n    def #{name}(*args)\n      @contents.send(:#{name}, *args)\n    end\n  EOF\nend",
+          "label": "C"
+        },
+        {
+          "content": "[:push, :pop].each do |name|\n  class_eval(<<-EOF)\n    def #{name}(*args)\n      @contents.send(:#{name}, *args)\n    end\n  EOF\nend",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "module I\nend\n\nmodule P\nend\n\nclass C\n  include I\n  prepend P\nend\n\np C.ancestors",
+      "correct_answer": "A",
+      "explanation": "スーパークラスが明示的に指定されていないクラスは自動的にObjectを継承します。includeによってmixinされたモジュールは、継承チェーン上で当該クラスとそのスーパークラスの間に現れます。prependによってmixinされたモジュールは、継承チェーン上で当該クラスより前に現れます。",
+      "options": [
+        {
+          "content": "[P, C, I, Object, Kernel, BasicObject]",
+          "label": "A"
+        },
+        {
+          "content": "[C, P, I, Object, Kernel, BasicObject]",
+          "label": "B"
+        },
+        {
+          "content": "[C, I, Object, Kernel, BasicObject, P]",
+          "label": "C"
+        },
+        {
+          "content": "[P, I, C, Object, Kernel, BasicObject]",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "x = __(1)__\np x + 1\n\n[実行結果]\n(4/3)",
+      "correct_answer": "A",
+      "explanation": "数値リテラルの末尾のrはRationalオブジェクトを生成することを意味します。同じ結果を他の方法(例: 1 / 3.to_rまたはRational(1, 3))によって得ることもできます。",
+      "options": [
+        {
+          "content": "1 / 3r",
+          "label": "A"
+        },
+        {
+          "content": "1 / 3R",
+          "label": "B"
+        },
+        {
+          "content": "1 / %r(3)",
+          "label": "C"
+        },
+        {
+          "content": "1 / 3",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(複数選択)",
+      "code": "p (\"aaaaaa\"..\"zzzzzz\").lazy.select { |e| e.end_with?(\"f\") }.__(1)__\n\n[実行結果]\n[\"aaaaaf\", \"aaaabf\", \"aaaacf\"]",
+      "correct_answer": "A, C",
+      "explanation": "takeメソッドはEnumerator::Lazyによって定義され、列挙が何らかの方法によって強制されるまで実行が遅延されます。Enumerator::LazyによってオーバーライドされていないEnumerableのメソッドの呼び出しは、列挙を強制します。",
+      "options": [
+        {
+          "content": "first(3)",
+          "label": "A"
+        },
+        {
+          "content": "take(3)",
+          "label": "B"
+        },
+        {
+          "content": "take(3).force",
+          "label": "C"
+        },
+        {
+          "content": "first(3).force",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "def round(n, __(1)__)\n  n.round(__(1)__)\nend\n\np round(2.5, half: :even)\n\n[実行結果]\n2",
+      "correct_answer": "D",
+      "explanation": "...は、キーワード引数やブロックを含め、残りの引数を転送します。",
+      "options": [
+        {
+          "content": "*",
+          "label": "A"
+        },
+        {
+          "content": "&",
+          "label": "B"
+        },
+        {
+          "content": "..",
+          "label": "C"
+        },
+        {
+          "content": "...",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "class A\n  def foo\n    self.bar\n  end\n\n  private\n\n  def bar\n    \"baz\"\n  end\n\n  def self.bar\n    \"quux\"\n  end\nend\n\nputs A.new.foo",
+      "correct_answer": "A",
+      "explanation": "プライベートメソッドの呼び出し時に明示的にレシーバを指定することはできません。ただし、selfをレシーバとして指定することはできます。",
+      "options": [
+        {
+          "content": "baz",
+          "label": "A"
+        },
+        {
+          "content": "quux",
+          "label": "B"
+        },
+        {
+          "content": "文法エラーが発生する",
+          "label": "C"
+        },
+        {
+          "content": "例外が発生する",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(2つ選択)",
+      "code": "class Greeter\n  class << self\n    def hello\n      puts \"Hello there!\"\n    end\n  end\nend\n\n__(1)__\n\n[実行結果]\nHello there!",
+      "correct_answer": "B, C",
+      "explanation": "class << ...構文はオブジェクトの特異クラスを定義するために使用され、特定のオブジェクトにメソッドを定義することができます。Rubyではクラスもオブジェクトであるため、クラスにメソッドを追加することができます。",
+      "options": [
+        {
+          "content": "Greeter.new.hello",
+          "label": "A"
+        },
+        {
+          "content": "Greeter.hello",
+          "label": "B"
+        },
+        {
+          "content": "Greeter.new.class.hello",
+          "label": "C"
+        },
+        {
+          "content": "Greeter.class.new.hello",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(2つ選択)",
+      "code": "__(1)__\n\np multiply_by(4) { 2 + 3 }\n\n[実行結果]\n20",
+      "correct_answer": "A, C",
+      "explanation": "メソッド定義で指定されているかどうかに関らず、Rubyのすべてのメソッドはブロックを受け付けます。予約語yieldはブロックを暗黙的に呼ぶために使用されます。&blockはブロックをProcオブジェクトに変換するために使用され、call()によってブロックを呼び出したり、他のメソッドに渡したりすることができます。",
+      "options": [
+        {
+          "content": "def multiply_by(n, &block)\n  n * block.call\nend",
+          "label": "A"
+        },
+        {
+          "content": "def multiply_by(n, &block)\n  n * block\nend",
+          "label": "B"
+        },
+        {
+          "content": "def multiply_by(n)\n  n * yield\nend",
+          "label": "C"
+        },
+        {
+          "content": "def multiply_by(n)\n  n * yield.call\nend",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(2つ選択)",
+      "code": "__(1)__\n\np sum { |e| e << 1 << 5 << 7 }\n\n[実行結果]\n13",
+      "correct_answer": "B, C",
+      "explanation": "yieldによってブロックに引数を渡して呼ぶ場合は、yield(x)のように関数風に記述します。Procオブジェプトによってブロックを呼ぶ場合は、引数をcall()メソッドに渡します。",
+      "options": [
+        {
+          "content": "def sum(&block)\n  array = []\n  \n  block(array)\n  \n  array.reduce(:+)\nend",
+          "label": "A"
+        },
+        {
+          "content": "def sum(&block)\n  array = []\n  \n  block.call(array)\n  \n  array.reduce(:+)\nend",
+          "label": "B"
+        },
+        {
+          "content": "def sum\n  array = []\n  \n  yield(array)\n  \n  array.reduce(:+)\nend",
+          "label": "C"
+        },
+        {
+          "content": "def sum\n  array = []\n  \n  yield.call(array)\n  \n  array.reduce(:+)\nend",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "class A\n  @@x = 1\nend\n\nclass B < A\n  def self.x\n    @@x\n  end\nend\n\nclass C < A\n  def self.inc\n    @@x += 1\n  end\nend\n\nC.inc\np B.x",
+      "correct_answer": "B",
+      "explanation": "クラス変数は一つのクラス内で共有されるだけでなく、継承階層の下位にも共有されます。しがたってAに定義された@@xは、子クラスのBとCにも共有され、同じ変数が参照されます。",
+      "options": [
+        {
+          "content": "1",
+          "label": "A"
+        },
+        {
+          "content": "2",
+          "label": "B"
+        },
+        {
+          "content": "3",
+          "label": "C"
+        },
+        {
+          "content": "例外が発生する",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "words = [\"apple\", \"banana\", \"cabbage\"]\npop = Proc.new { words.pop }\n3.times{ puts __(1)__ }\n\n[実行結果]\ncabbage\nbanana\napple",
+      "correct_answer": "D",
+      "explanation": "Procオブジェクトはブロックをカプセル化し、後でProc#callによって呼び出すことを可能にします。Procオブジェクトはクロージャを形成し、Procオブジェクトが生成された時のローカル変数をブロックに結び付けます。",
+      "options": [
+        {
+          "content": "pop.load",
+          "label": "A"
+        },
+        {
+          "content": "pop.send",
+          "label": "B"
+        },
+        {
+          "content": "pop.run",
+          "label": "C"
+        },
+        {
+          "content": "pop.call",
+          "label": "D"
+        },
+        {
+          "content": "pop.eval",
+          "label": "E"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(2つ選択)",
+      "code": "words = [\"apple\", \"banana\", \"cabbage\"]\npop = __(1)__{ words.pop }\n3.times{ puts pop.call }\n\n[実行結果]\ncabbage\nbanana\napple",
+      "correct_answer": "A, C",
+      "explanation": "Proc.newとlambdaはいずれもProcオブジェクトを生成しますが、その挙動はまったく同じというわけではありません。lambdaによって生成されたProcは引数のチェックが厳密なのに対し、通常のProcは使用されない引数を無視します。",
+      "options": [
+        {
+          "content": "Proc.new",
+          "label": "A"
+        },
+        {
+          "content": "Block.new",
+          "label": "B"
+        },
+        {
+          "content": "lambda",
+          "label": "C"
+        },
+        {
+          "content": "Lambda.new",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "add = __(1)__\nputs add.call(\"hello\")\n\n[実行結果]\nHELLO",
+      "correct_answer": "A",
+      "explanation": "->(...) { }(ラムダリテラル)構文はlambda { |...| }と同等の省略記法です。",
+      "options": [
+        {
+          "content": "->(e) { e.upcase }",
+          "label": "A"
+        },
+        {
+          "content": "\\(e) -> { e.upcase }",
+          "label": "B"
+        },
+        {
+          "content": "-> { (e) e.upcase }",
+          "label": "C"
+        },
+        {
+          "content": "-> { |e| e.upcase }",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "__(1)__\n  x + y\nend\n\np add(1, 2)\n\n[実行結果]\n3",
+      "correct_answer": "D",
+      "explanation": "トップレベルのdefine_methodはObjectにメソッドを定義します。(A), (B), (C)ではProcを生成してローカル変数addに代入していますが、add(1, 2)はProcを呼び出しません。",
+      "options": [
+        {
+          "content": "add = ->(x, y) do",
+          "label": "A"
+        },
+        {
+          "content": "add = lambda do |x, y|",
+          "label": "B"
+        },
+        {
+          "content": "add = Proc.new do |x, y|",
+          "label": "C"
+        },
+        {
+          "content": "define_method(:add) do |x, y|",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "def reader_method(s)\n  <<~EOF\n    def #{s}\n      @#{s}\n    end\n  EOF\nend\n\nprint reader_method(\"foo\")",
+      "correct_answer": "C",
+      "explanation": "<<~EOFはsquiggly heredocと呼ばれ、先頭の空白が除去されます。",
+      "options": [
+        {
+          "content": "    def foo\n      @foo\n    end",
+          "label": "A"
+        },
+        {
+          "content": "  def foo\n    @foo\n  end",
+          "label": "B"
+        },
+        {
+          "content": "def foo\n  @foo\nend",
+          "label": "C"
+        },
+        {
+          "content": "文法エラーが発生する",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "obj = Object.new\n\ndef obj.hello\n  puts \"Hi!\"\nend\n\ncopy = __(1)__\n\ncopy.hello\n\n[実行結果]\nHi!",
+      "correct_answer": "C",
+      "explanation": "Object#dupはオブジェクトの特異メソッドをコピーしません。Marshal.dumpは特異メソッドをもつオブジェクトをシリアライズできません。Object#copyというメソッドはありません。",
+      "options": [
+        {
+          "content": "Marshal.load(Marshal.dump(obj))",
+          "label": "A"
+        },
+        {
+          "content": "obj.dup",
+          "label": "B"
+        },
+        {
+          "content": "obj.clone",
+          "label": "C"
+        },
+        {
+          "content": "obj.copy",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "class ShoppingList\n  def initialize\n    @items = []\n  end\n\n  def add_item(item)\n    @items << item\n  end\n\n  def __(1)__\n    @items.map { |e| \"- #{e}\" }.join(\"\\n\")\n  end\nend\n\nlist = ShoppingList.new\n\nlist.add_item(\"Milk\")\nlist.add_item(\"Bread\")\nlist.add_item(\"Eggs\")\n\nputs list\n\n[実行結果]\n- Milk\n- Bread\n- Eggs",
+      "correct_answer": "A",
+      "explanation": "多くのRubyのメソッド(Kernel#putsを含む)はオブジェクトを文字列に変換する際にto_sを呼び出します。Object#to_sのデフォルトの実装は、単純で一般的な出力を行います。to_sをオーバーライドすると、問題文のようによりよい文字列表現を提供することができます。",
+      "options": [
+        {
+          "content": "to_s",
+          "label": "A"
+        },
+        {
+          "content": "to_str",
+          "label": "B"
+        },
+        {
+          "content": "inspect",
+          "label": "C"
+        },
+        {
+          "content": "puts",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "class ShoppingList\n  def initialize\n    @items = []\n  end\n\n  def add_item(item)\n    @items << item\n  end\n\n  def __(1)__\n    \"ShoppingList:\\n  @items: #{@items.inspect}\"\n  end\nend\n\nlist = ShoppingList.new\n\nlist.add_item(\"Milk\")\nlist.add_item(\"Bread\")\nlist.add_item(\"Eggs\")\n\np list\n\n[実行結果]\nShoppingList:\n  @items: [\"Milk\", \"Bread\", \"Eggs\"]",
+      "correct_answer": "C",
+      "explanation": "Kernel#pは引数に対してinspectを呼び出してデバッグ用途の文字列に変換します。Object#inspectのデフォルトの機能は基本的な情報を提供しますが、特定のクラスやオブジェクトでオーバーライドすることでカスタマイズできます。",
+      "options": [
+        {
+          "content": "to_s",
+          "label": "A"
+        },
+        {
+          "content": "to_str",
+          "label": "B"
+        },
+        {
+          "content": "inspect",
+          "label": "C"
+        },
+        {
+          "content": "p",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "p __(1)__.flat_map {|z|\n  (1..z).flat_map {|x|\n    (x..z).select {|y|\n      x**2 + y**2 == z**2\n    }.map {|y|\n      [x, y, z]\n    }\n  }\n}.take(3).to_a\n\n[実行結果]\n[[3, 4, 5], [6, 8, 10], [5, 12, 13]]",
+      "correct_answer": "D",
+      "explanation": "x..は半無限区間を表現します。Enumerable#lazyはEnumerator::Lazyを返します。Enumerator::LazyはEnumerableの多くのメソッドを再定義しており、列挙を必要になった時まで遅延させます。",
+      "options": [
+        {
+          "content": "(1..-1).delay",
+          "label": "A"
+        },
+        {
+          "content": "(1..).delay",
+          "label": "B"
+        },
+        {
+          "content": "(1..-1).lazy",
+          "label": "C"
+        },
+        {
+          "content": "(1..).lazy",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "ary = [\"foo\", \"bar\", nil, \"baz\"]\n\np ary.__(1)__ { |i|\n  i&.upcase\n}\n\n[実行結果]\n[\"FOO\", \"BAR\", \"BAZ\"]",
+      "correct_answer": "B",
+      "explanation": "Enumerable#filter_mapはブロックが返した値のうち、真の値だけを配列として返します。",
+      "options": [
+        {
+          "content": "map",
+          "label": "A"
+        },
+        {
+          "content": "filter_map",
+          "label": "B"
+        },
+        {
+          "content": "collect",
+          "label": "C"
+        },
+        {
+          "content": "collect_compact",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。",
+      "code": "a, b, *c = [\"apple\", \"banana\", \"carrot\", \"daikon\"]\n\np c",
+      "correct_answer": "D",
+      "explanation": "splat演算子(*)はすべての残りの右辺値を配列として一つの変数に代入します。",
+      "options": [
+        {
+          "content": "[\"apple\", \"banana\", \"carrot\", \"daikon\"]",
+          "label": "A"
+        },
+        {
+          "content": "\"carrot\"",
+          "label": "B"
+        },
+        {
+          "content": "[\"carrot\"]",
+          "label": "C"
+        },
+        {
+          "content": "[\"carrot\", \"daikon\"]",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "content": "以下の実行結果を出力するコードを選択してください。(1つ選択)",
+      "code": "[実行結果]\n[[\"apple\", \"banana\", \"carrot\"]]",
+      "correct_answer": "B",
+      "explanation": "splat演算子(*)は、メソッドの引数で使用された場合、残りのすべての引数を配列として一つの引数で参照できるようにします。回答の*(B)*では、fx(*args)は0個以上の引数を取り、すべての引数を配列argsで保持します。fx([\"apple\", \"banana\", \"carrot\"])が呼び出されると単一の引数である配列が引数のリストを表す配列の中に配置され、argsは[[\"apple\",\"banana\",\"carrot\"]]を参照します。",
+      "options": [
+        {
+          "content": "def fx(*args)\n  p(args)\nend\nfx(*[\"apple\", \"banana\", \"carrot\"])",
+          "label": "A"
+        },
+        {
+          "content": "def fx(*args)\n  p(args)\nend\nfx([\"apple\", \"banana\", \"carrot\"])",
+          "label": "B"
+        },
+        {
+          "content": "def fx(*args)\n  p(args)\nend\nfx(\"apple\", \"banana\", \"carrot\")",
+          "label": "C"
+        },
+        {
+          "content": "def fx(*args)\n  p(*args)\nend\nfx([\"apple\", \"banana\", \"carrot\"])",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "p [\"foo\", \"bar\", \"baz\"].map { __(1)__.upcase }\n\n[実行結果]\n[\"FOO\", \"BAR\", \"BAZ\"]",
+      "correct_answer": "A",
+      "explanation": "_1, _2, _3...は暗黙に定義されるブロックパラメータで、ナンバードパラメータと呼ばれます。",
+      "options": [
+        {
+          "content": "_1",
+          "label": "A"
+        },
+        {
+          "content": "$1",
+          "label": "B"
+        },
+        {
+          "content": "$_",
+          "label": "C"
+        },
+        {
+          "content": "@1",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。",
+      "code": "def fx(a:, b: \"apple\")\n  p a\n  p b\nend\n\nfx(b: \"banana\")",
+      "correct_answer": "D",
+      "explanation": "必要なキーワード引数が指定されなかった場合、ArgumentErrorが発生します。",
+      "options": [
+        {
+          "content": "nil\napple",
+          "label": "A"
+        },
+        {
+          "content": "nil\nbanana",
+          "label": "B"
+        },
+        {
+          "content": "文法エラーが発生する",
+          "label": "C"
+        },
+        {
+          "content": "例外が発生する",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(3つ選択)",
+      "code": "def add(x:, y:, **params)\n  z = x + y\n\n  params[:round] ? z.round : z\nend\n\n__(1)__\n\n[実行結果]\n7",
+      "correct_answer": "B, C, D",
+      "explanation": "キーワード引数を使用する際、**演算子は明示的に指定されなかったキーワード引数をHashで受け取るために使用できます。**演算子は、メソッド呼び出しの際にHashをキーワード引数に変換するために使用することもできます。",
+      "options": [
+        {
+          "content": "p add(x: 2.75, y: 5.25, round: true)",
+          "label": "A"
+        },
+        {
+          "content": "p add(x: 3.75, y: 3, round: true)",
+          "label": "B"
+        },
+        {
+          "content": "options = {:round => true}; p add(x: 3.75, y: 3, **options)",
+          "label": "C"
+        },
+        {
+          "content": "p add(x: 3, y: 4)",
+          "label": "D"
+        },
+        {
+          "content": "p add(x: 7)",
+          "label": "E"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(2つ選択)",
+      "code": "class Speaker\n  @message = \"Hello!\"\n\n  class << self\n    @message = \"Howdy!\"\n\n    def speak\n      @message\n    end\n  end\nend\n\n__(1)__\n\n[実行結果]\nHello!",
+      "correct_answer": "A, C",
+      "explanation": "Rubyではクラスはオブジェクトなので、クラスのインスタンス変数を定義することができます。すべてのオブジェクトは、クラスも含め、特異クラスをもちます。この例では、Speakerクラスとその特異クラスに@messageというインスタンス変数が定義されています。これらは別々の変数です。特異メソッドSpeaker.speakはSpeakerクラスのコンテキストで評価され、@messageは特異クラスのインスタンス変数ではなくSpeakerクラスのインスタンス変数を参照します。",
+      "options": [
+        {
+          "content": "puts Speaker.speak",
+          "label": "A"
+        },
+        {
+          "content": "puts Speaker.singleton_class.speak",
+          "label": "B"
+        },
+        {
+          "content": "puts Speaker.instance_variable_get(:@message)",
+          "label": "C"
+        },
+        {
+          "content": "puts Speaker.singleton_class.instance_variable_get(:@message)",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "class Speaker\n  @message = \"Hello!\"\n\n  class << self\n    @message = \"Howdy!\"\n  end\nend\n\nclass << Speaker\n  p @message\nend",
+      "correct_answer": "B",
+      "explanation": "この例では、class << SpeakerはSpeakerの特異クラス定義を再オープンし、そこでの@messageは特異クラスに直接定義されたインスタンス変数を参照します。",
+      "options": [
+        {
+          "content": "\"Hello!\"",
+          "label": "A"
+        },
+        {
+          "content": "\"Howdy!\"",
+          "label": "B"
+        },
+        {
+          "content": "nil",
+          "label": "C"
+        },
+        {
+          "content": "文法エラーが発生する",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "def x\n  puts \"x\"\nend\n\ndef y\n  puts \"y\"\n  throw :done\nend\n\ndef z\n  puts \"z\"\nend\n\n\n__(1)__ do\n  x\n  y\n  z\nend\n\nputs \"done!\"\n\n[実行結果]\nx\ny\ndone!",
+      "correct_answer": "C",
+      "explanation": "catchブロックでは、throwが実行されるまでコードが実行されます。catchに対応するシンボルがthrowに渡されると、Rubyはブロックの実行を終了し、ブロックの次の処理から実行を継続します。catchがthrowに対応しない場合は、外側のcatchが内側から順番に探され、トップレベルに到達すると例外が発生します。",
+      "options": [
+        {
+          "content": "try",
+          "label": "A"
+        },
+        {
+          "content": "catch",
+          "label": "B"
+        },
+        {
+          "content": "catch :done",
+          "label": "C"
+        },
+        {
+          "content": "rescue",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "letters = catch(:done) do\n  (\"a\"..\"z\").each do |a|\n    (\"a\"..\"z\").each do |b|\n      (\"a\"..\"z\").each do |c|\n        if a < b && b < c\n          __(1)__\n        end\n      end\n    end\n  end\nend\n\nputs letters.join\n\n[実行結果]\nabc",
+      "correct_answer": "C",
+      "explanation": "2引数のthrowが使用された場合、2番目の引数が対応するcatchの呼び出しの値として返されます。",
+      "options": [
+        {
+          "content": "throw [a,b,c]",
+          "label": "A"
+        },
+        {
+          "content": "throw [a,b,c], :done",
+          "label": "B"
+        },
+        {
+          "content": "throw :done, [a,b,c]",
+          "label": "C"
+        },
+        {
+          "content": "raise :done, [a,b,c]",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(2つ選択)",
+      "code": "begin\n  __(1)__\nrescue\n  puts \"OK\"\nend\n\n[実行結果]\nOK",
+      "correct_answer": "A, C",
+      "explanation": "rescueに特定の例外クラスが指定されなかった場合、デフォルトでStandardErrorとそのサブクラスが捕捉されます。ほとんどの組み込み例外クラスはStandardErrorのサブクラスですが、通常捕捉されることを想定していないいくつかの例外クラスはExceptionを直接継承しています。",
+      "options": [
+        {
+          "content": "raise StandardError",
+          "label": "A"
+        },
+        {
+          "content": "raise Exception",
+          "label": "B"
+        },
+        {
+          "content": "raise ArgumentError",
+          "label": "C"
+        },
+        {
+          "content": "raise ScriptError",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "AnError = Class.new(Exception)\n\nbegin\n  raise AnError\nrescue\n  puts \"Bare rescue\"\nrescue StandardError\n  puts \"StandardError rescue\"\nrescue AnError\n  puts \"AnError rescue\"\nrescue Exception\n  puts \"Exception rescue\"\nend",
+      "correct_answer": "A",
+      "explanation": "rescueに特定の例外クラスが指定されなかった場合、StandardErrorとそのサブクラスが捕捉されます。したがって、Exceptionを直接継承したクラスは捕捉されません。一つのbegin/endブロックでは、複数のrescue節がマッチした場合も、最初にマッチしたrescue節だけが実行されます。",
+      "options": [
+        {
+          "content": "Bare rescue",
+          "label": "A"
+        },
+        {
+          "content": "StandardError rescue",
+          "label": "B"
+        },
+        {
+          "content": "AnError rescue",
+          "label": "C"
+        },
+        {
+          "content": "Exception rescue",
+          "label": "D"
+        },
+        {
+          "content": "AnError rescue\nException rescue",
+          "label": "E"
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "AnError = Class.new(Exception)\n\nbegin\n  raise AnError\nrescue\n  puts \"Bare rescue\"\nrescue StandardError\n  puts \"StandardError rescue\"\nrescue Exception\n  puts \"Exception rescue\"\nrescue AnError\n  puts \"AnError rescue\"  \nend",
+      "correct_answer": "D",
+      "explanation": "rescue Exceptionとrescue AnErrorはいずれも発生した例外にマッチしますが、この例ではrescue Exceptionが先に指定されているため実行され、残りのrescue節は無視されます。",
+      "options": [
+        {
+          "content": "Bare rescue",
+          "label": "A"
+        },
+        {
+          "content": "StandardError rescue",
+          "label": "B"
+        },
+        {
+          "content": "AnError rescue",
+          "label": "C"
+        },
+        {
+          "content": "Exception rescue",
+          "label": "D"
+        },
+        {
+          "content": "Exception rescue\nAnError rescue",
+          "label": "E"
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "begin\n  \"hello\".world\nrescue => ex\n  p ex.class\nend",
+      "correct_answer": "D",
+      "explanation": "rescue節で=>が使用された場合、発生した例外が変数に代入されます。この場合、存在しないメソッドを呼び出そうとしているため、NoMethodErrorが発生します。",
+      "options": [
+        {
+          "content": "StandardError",
+          "label": "A"
+        },
+        {
+          "content": "Exception",
+          "label": "B"
+        },
+        {
+          "content": "NameError",
+          "label": "C"
+        },
+        {
+          "content": "NoMethodError",
+          "label": "D"
+        },
+        {
+          "content": "ArgumentError",
+          "label": "E"
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "CustomError = Class.new(StandardError)\n\ndef boom\n  raise CustomError \nrescue\n  raise\nend\n\nbegin \n  boom\nrescue => e\n  p e.class\nend",
+      "correct_answer": "A",
+      "explanation": "rescue節でraiseが引数なしで呼び出された場合、捕捉された例外が再度raiseされます。この場合、CustomErrorが再度raiseされ、外側のrescue節で捕捉されます。",
+      "options": [
+        {
+          "content": "CustomError",
+          "label": "A"
+        },
+        {
+          "content": "StandardError",
+          "label": "B"
+        },
+        {
+          "content": "Exception",
+          "label": "C"
+        },
+        {
+          "content": "RuntimeError",
+          "label": "D"
+        },
+        {
+          "content": "SyntaxError",
+          "label": "E"
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "def greeting\n  \"hello\"\nensure\n  puts \"Ensure called!\"\n\n  \"hi\"\nend\n\nputs greeting",
+      "correct_answer": "C",
+      "explanation": "メソッド(またはbegin/endブロック)のensure節は、例外が発生してもしなくても、常に実行されます。ただし、ensure節の値は返り値としては使用されず、ensure節が実行される直前の評価結果が返り値として使用されます。",
+      "options": [
+        {
+          "content": "hello",
+          "label": "A"
+        },
+        {
+          "content": "hi",
+          "label": "B"
+        },
+        {
+          "content": "Ensure called!\nhello",
+          "label": "C"
+        },
+        {
+          "content": "Ensure called!\nhi",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "class Identity\n  def self.this_object\n    self\n  end\n  \n  def this_object\n    self\n  end\nend\n\na = Identity.this_object\nb = Identity.this_object\n\nc = Identity.new.this_object\nd = Identity.new.this_object\n\np a == b\np c == d",
+      "correct_answer": "B",
+      "explanation": "クラスメソッドでは、selfは現在のクラスを表すClassインスタンスを参照します。インスタンスメソッドでは、selfは現在のクラスの特定のインスタンスを参照します。",
+      "options": [
+        {
+          "content": "true\ntrue",
+          "label": "A"
+        },
+        {
+          "content": "true\nfalse",
+          "label": "B"
+        },
+        {
+          "content": "false\ntrue",
+          "label": "C"
+        },
+        {
+          "content": "false\nfalse",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "class Identity\n  def self.this_object\n    self.class\n  end\n  \n  def this_object\n    self\n  end\nend\n\np Identity.this_object.class\np Identity.new.this_object.class",
+      "correct_answer": "B",
+      "explanation": "クラスメソッドでは、selfはClassインスタンスを参照します。インスタンスメソッドでは、selfは現在インスタンス化されているオブジェクトを参照します。",
+      "options": [
+        {
+          "content": "Identity\nIdentity",
+          "label": "A"
+        },
+        {
+          "content": "Class\nIdentity",
+          "label": "B"
+        },
+        {
+          "content": "Object\nIdentity",
+          "label": "C"
+        },
+        {
+          "content": "Class\nObject",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "module Mixin\n  def this_object\n    self\n  end\nend\n\nclass Identity\n  include Mixin\nend\n\n\np Identity.new.this_object.class",
+      "correct_answer": "D",
+      "explanation": "モジュールのmixinやクラスの継承が使用された複雑な継承チェーンにおいても、selfは常に現在のコンテキストにおけるオブジェクトを参照します。この例では、this_objectはMixinで定義されていますが、Identityクラスにインクルードされており、selfはIdentityの特定のオブジェクトを参照します。",
+      "options": [
+        {
+          "content": "Mixin",
+          "label": "A"
+        },
+        {
+          "content": "Class",
+          "label": "B"
+        },
+        {
+          "content": "Object",
+          "label": "C"
+        },
+        {
+          "content": "Identity",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "content": "Classの直接のスーパークラスを選択してください。(1つ選択)",
+      "code": null,
+      "correct_answer": "B",
+      "explanation": "ClassはModuleのサブクラスですが、クラスオブジェクトはmixinとしては使用できません（つまり、include、extend、prependにClassオブジェクトを渡すことはできません）。RubyにおけるModuleとClassの継承関係は実装の詳細であり、機能と用途に重複はあるものの、どちらか一方がもう一方の純粋なサブタイプであるというわけではありません。",
+      "options": [
+        {
+          "content": "Object",
+          "label": "A"
+        },
+        {
+          "content": "Module",
+          "label": "B"
+        },
+        {
+          "content": "BasicObject",
+          "label": "C"
+        },
+        {
+          "content": "Class",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "content": "以下のコードがあります。以下の記述のうち正しいものを選択してください。(1つ選択)",
+      "code": "module Mixin\n  def self.greet\n    puts \"Hello World!\"\n  end\nend\n\nclass SomeClass\n  include Mixin\nend",
+      "correct_answer": "A",
+      "explanation": "この例ではgreetメソッドはMixinモジュール自体の特異メソッドとして定義され、他のクラスにmixinすることはできません。",
+      "options": [
+        {
+          "content": "Mixin.greetはHello World!を出力し、SomeClass.greetは例外を発生する。",
+          "label": "A"
+        },
+        {
+          "content": "Mixin.greetは例外を発生し、SomeClass.greetはHello World!を出力する。",
+          "label": "B"
+        },
+        {
+          "content": "Mixin.greetもSomeClass.greetもHello World!を出力する。",
+          "label": "C"
+        },
+        {
+          "content": "Mixin.greetもSomeClass.greetもHello World!を例外を発生する。",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "module Mixin\n  def greet\n    puts \"Hello World!\"\n  end\nend\n\nclass SomeClass\n  extend Mixin\nend\n\n__(1)__\n\n[実行結果]\nHello World!",
+      "correct_answer": "C",
+      "explanation": "extendメソッドはモジュールを一つのオブジェクトにmixinするために使用されます。クラス定義で使用された場合は、extendはクラス自身にmixinするため、mixinされたメソッドはクラスメソッドして使用できます。",
+      "options": [
+        {
+          "content": "Mixin.greet",
+          "label": "A"
+        },
+        {
+          "content": "SomeClass.new.greet",
+          "label": "B"
+        },
+        {
+          "content": "SomeClass.greet",
+          "label": "C"
+        },
+        {
+          "content": "Mixin.new.greet",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "module Mixin\n  def greet\n    puts \"Hello World!\"\n  end\nend\n\nclass SomeClass\n  include Mixin\nend\n\n__(1)__\n\n[実行結果]\nHello World!",
+      "correct_answer": "B",
+      "explanation": "includeメソッドはモジュールをクラスにmixinし、mixinされたメソッドはインスタンスメソッドとして使用できます。",
+      "options": [
+        {
+          "content": "Mixin.greet",
+          "label": "A"
+        },
+        {
+          "content": "SomeClass.new.greet",
+          "label": "B"
+        },
+        {
+          "content": "SomeClass.greet",
+          "label": "C"
+        },
+        {
+          "content": "Mixin.new.greet",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る記述として不適切なものを選択してください。(1つ選択)",
+      "code": "class BaseClass\n  private\n\n  def greet\n    puts \"Hello World!\"\n  end\nend\n\nclass ChildClass < BaseClass\n  __(1)__\nend\n\n\nChildClass.new.greet\n\n[実行結果]\nHello World!",
+      "correct_answer": "B",
+      "explanation": "protectedメソッドは同じクラスかそのサブクラスのインスタンスからのみ呼び出すことができます。この場合、外部からの呼び出しを許可するため、protectedは適切ではありません。",
+      "options": [
+        {
+          "content": "public :greet",
+          "label": "A"
+        },
+        {
+          "content": "protected :greet",
+          "label": "B"
+        },
+        {
+          "content": "def greet\n  super\nend",
+          "label": "C"
+        },
+        {
+          "content": "alias_method :original_greet, :greet\n\ndef greet\n  original_greet\nend",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "h = [1, 2, 3]\ncase h\n__(1)__ [x, y]\n  p [:two, x, y]\n__(1)__  [x, y, z]\n  p [:three, x, y, z]\nend\n\n[実行結果]\n[:three, 1, 2, 3]",
+      "correct_answer": "B",
+      "explanation": "パターンマッチは構造化された値に対して深いマッチングを行うための機能です。パターンマッチでは、case式でwhenの代りにinを使用します。",
+      "options": [
+        {
+          "content": "when",
+          "label": "A"
+        },
+        {
+          "content": "in",
+          "label": "B"
+        },
+        {
+          "content": "if",
+          "label": "C"
+        },
+        {
+          "content": "=>",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "class Alphabet\n  include Enumerable\n\n  def initialize\n    @letters = (\"A\"..\"Z\").to_a\n  end\n\n  def __(1)__\n    @letters.each do |e|\n      yield e\n    end\n  end\nend\n\nset = Alphabet.new\n\np set.take(5)\np set.select { |e| e > \"W\" }\n\n[実行結果]\n[\"A\", \"B\", \"C\", \"D\", \"E\"]\n[\"X\", \"Y\", \"Z\"]",
+      "correct_answer": "B",
+      "explanation": "Enumerableはmixinされるオブジェクトが要素を一つずつブロックに渡すeachメソッドを実装していることを想定しています。Enumerableのさまざまなリスト操作はeachにもとづいて実装されています。",
+      "options": [
+        {
+          "content": "all",
+          "label": "A"
+        },
+        {
+          "content": "each",
+          "label": "B"
+        },
+        {
+          "content": "to_a",
+          "label": "C"
+        },
+        {
+          "content": "to_ary",
+          "label": "D"
+        },
+        {
+          "content": "to_enum",
+          "label": "E"
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "class TShirt\n  SIZES = [:xs, :s, :m, :l, :xl, :xxl]\n\n  include Comparable\n\n  def initialize(size)\n    @size = size\n  end\n  \n  attr_reader :size\n\n  def <=>(other)\n    SIZES.index(size) <=> SIZES.index(other.size)\n  end\nend\n\nmedium = TShirt.new(:m)\nlarge  = TShirt.new(:l)\n\np medium == large\np medium <  large\np medium <= large\np medium >  large\np medium >= large",
+      "correct_answer": "B",
+      "explanation": "Comparableモジュールはこの例で使用されているすべての比較メソッド(<, <=, ==, >=, >)を提供しています。これらのメソッドは、2つの要素のソート順序に応じて負の数、0、正の数のいずれかを返す<=>演算子に依存しています。",
+      "options": [
+        {
+          "content": "true\nfalse\ntrue\nfalse\ntrue",
+          "label": "A"
+        },
+        {
+          "content": "false\ntrue\ntrue\nfalse\nfalse",
+          "label": "B"
+        },
+        {
+          "content": "false\nfalse\nfalse\ntrue\ntrue",
+          "label": "C"
+        },
+        {
+          "content": "false\nfalse\nfalse\nfalse\nfalse",
+          "label": "D"
+        },
+        {
+          "content": "例外が発生する",
+          "label": "E"
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "content": "以下のコードがあります。実行結果として正しいものを選択してください。(1つ選択)",
+      "code": "require \"date\"\n\ndate = Date.new(2000, 2, 24)\n\nputs(date << 12)\nputs(date >> 12)",
+      "correct_answer": "C",
+      "explanation": "<<は現在の日付のn月前を表すDateオブジェクトを返します。>>は現在の日付のn月後を表すDateオブジェクトを返します。同じ日がその月に存在しない場合（例: 31日まである月と30までの月、うるう年とそれ以外の年などのケース）、<<と>>はその月の最後の有効な日付を返します。",
+      "options": [
+        {
+          "content": "2000-02-12\n2000-03-07",
+          "label": "A"
+        },
+        {
+          "content": "2000-03-07\n2000-02-12",
+          "label": "B"
+        },
+        {
+          "content": "1999-02-24\n2001-02-24",
+          "label": "C"
+        },
+        {
+          "content": "1988-02-24\n2012-02-24",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "require \"time\"\n\nt = Time.__(1)__(\"00000024021993\", \"%S%M%H%d%m%Y\")\nputs t.iso8601\n\n[実行結果]\n1993-02-24T00:00:00+09:00",
+      "correct_answer": "D",
+      "explanation": "Time.strptimeは文字列を与えられたテンプレートによって解析し、Timeオブジェクトを返します。Time.parseはヒューリスティックを使用して文字列を解析し、テンプレートは受け取りません。",
+      "options": [
+        {
+          "content": "format",
+          "label": "A"
+        },
+        {
+          "content": "parse",
+          "label": "B"
+        },
+        {
+          "content": "strftime",
+          "label": "C"
+        },
+        {
+          "content": "strptime",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "require \"singleton\"\n\nclass Foo\n  __(1)__\nend\n\nx = Foo.instance\ny = Foo.instance\np x.equal?(y)\n\n[実行結果]\ntrue",
+      "correct_answer": "A",
+      "explanation": "SingletonモジュールはSingletonパターンを実装します。include Singletonはクラスの唯一のインスタンスを返すinstanceメソッドを追加します。",
+      "options": [
+        {
+          "content": "include Singleton",
+          "label": "A"
+        },
+        {
+          "content": "extend Singleton",
+          "label": "B"
+        },
+        {
+          "content": "using Singleton",
+          "label": "C"
+        },
+        {
+          "content": "singletonize",
+          "label": "D"
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "content": "以下の実行結果を出力するコードがあります。__(1)__に入る適切な記述を選択してください。(1つ選択)",
+      "code": "require 'forwardable'\n\nclass List\n  extend Forwardable\n\n  def initialize\n    @contents = []\n  end\n\n  __(1)__ :@contents, :push\n  __(1)__ :@contents, :[]\nend\n\nlist = List.new\nlist.push(\"a\")\nlist.push(\"b\")\nlist.push(\"c\")\np list[1]\n\n[実行結果]\n\"b\"",
+      "correct_answer": "C",
+      "explanation": "Forwardableモジュールは、Forwardable.def_delegatorを使用して、指定されたメソッドを特定のオブジェクトに委譲します。",
+      "options": [
+        {
+          "content": "forward",
+          "label": "A"
+        },
+        {
+          "content": "def_forwarder",
+          "label": "B"
+        },
+        {
+          "content": "def_delegator",
+          "label": "C"
+        },
+        {
+          "content": "define",
+          "label": "D"
+        }
+      ]
+    }
+  ]
+}

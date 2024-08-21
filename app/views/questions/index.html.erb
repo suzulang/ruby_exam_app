@@ -1,0 +1,148 @@
+<div id="progress-container" class="fixed-top bg-white">
+  <div class="container">
+    <div class="progress mt-2">
+      <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <p id="progress-text" class="progress-text mb-2">0 / <%= @questions.count %> 完成</p>
+  </div>
+</div>
+
+<div class="container mt-5 pt-4">
+  <h1 class="mb-4">问题列表</h1>
+
+  <form id="quiz-form">
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <div class="question-list">
+      <% @questions.each do |question| %>
+        <div class="card mb-4 question">
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= question.content %>
+              <% if question.correct_answer.split(',').length > 1 %>
+                <span class="badge bg-info text-white ml-2">多选题</span>
+              <% end %>
+            </h5>
+            <% if question.code.present? %>
+              <pre><code class="ruby"><%= question.code %></code></pre>
+            <% end %>
+            <div class="options">
+              <% question.options.each do |option| %>
+                <div class="form-check">
+                  <input class="form-check-input" 
+                         type="<%= question.correct_answer.split(',').length > 1 ? 'checkbox' : 'radio' %>" 
+                         name="question_<%= question.id %>" 
+                         id="option_<%= option.id %>" 
+                         value="<%= option.label %>">
+                  <label class="form-check-label" for="option_<%= option.id %>">
+                    <%= option.label %>: <%= option.content %>
+                  </label>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <button type="submit" class="btn btn-primary mb-4">提交答案</button>
+  </form>
+
+  <div id="result" class="mt-4" style="display: none;">
+    <h2>测试结果</h2>
+    <p>您的得分：<span id="score"></span> / <span id="total"></span></p>
+    <h3>正确答案：</h3>
+    <ul id="correct-answers"></ul>
+  </div>
+</div>
+
+<style>
+  #progress-container {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+  body {
+    padding-top: 60px;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const quizForm = document.getElementById('quiz-form');
+  const resultDiv = document.getElementById('result');
+  const scoreSpan = document.getElementById('score');
+  const totalSpan = document.getElementById('total');
+  const correctAnswersList = document.getElementById('correct-answers');
+  const progressBar = document.getElementById('progress-bar');
+  const progressText = document.getElementById('progress-text');
+  const totalQuestions = <%= @questions.count %>;
+  let answeredQuestions = 0;
+
+  function updateProgress() {
+    const progress = (answeredQuestions / totalQuestions) * 100;
+    progressBar.style.width = progress + '%';
+    progressBar.setAttribute('aria-valuenow', progress);
+    progressText.textContent = `${answeredQuestions} / ${totalQuestions} 完成`;
+  }
+
+  document.querySelectorAll('.form-check-input').forEach(input => {
+    input.addEventListener('change', function() {
+      const questionId = this.name.split('_')[1];
+      if (!this.closest('.question').classList.contains('answered')) {
+        answeredQuestions++;
+        this.closest('.question').classList.add('answered');
+        updateProgress();
+      }
+    });
+  });
+
+  quizForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(quizForm);
+    const userAnswers = {};
+    for (let [key, value] of formData.entries()) {
+      if (key.startsWith('question_')) {
+        const questionId = key.split('_')[1];
+        if (!userAnswers[questionId]) {
+          userAnswers[questionId] = [];
+        }
+        userAnswers[questionId].push(value);
+      }
+    }
+
+    console.log('Submitting answers:', userAnswers); // 添加日志
+
+    fetch('/questions/check_answers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ user_answers: userAnswers })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Received data:', data); // 添加日志
+      scoreSpan.textContent = data.score;
+      totalSpan.textContent = data.total;
+      correctAnswersList.innerHTML = '';
+      data.correct_answers.forEach(answer => {
+        const li = document.createElement('li');
+        li.textContent = `问题 ${answer.id}: ${answer.correct_answer}`;
+        correctAnswersList.appendChild(li);
+      });
+      resultDiv.style.display = 'block';
+      quizForm.style.display = 'none';
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('提交答案时出错，请稍后重试。');
+    });
+  });
+
+  updateProgress();
+});
+</script>
