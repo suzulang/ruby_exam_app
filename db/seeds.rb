@@ -14,19 +14,29 @@ require 'json'
 json_file_path = Rails.root.join('db/seeds/questions.json')
 questions_data = JSON.parse(File.read(json_file_path))
 
+puts "Total questions in JSON: #{questions_data['questions'].count}"
+
 # 遍历 JSON 数据并创建记录
-questions_data['questions'].each do |question_data|
-  question = Question.find_or_create_by(content: question_data['content']) do |q|
-    q.code = question_data['code']
-    q.correct_answer = question_data['correct_answer']
-    q.explanation = question_data['explanation']
-  end
+Question.destroy_all
+Option.destroy_all
+
+questions_data['questions'].each_with_index do |question_data, index|
+  question = Question.create!(
+    content: question_data['content'],
+    code: question_data['code'],
+    correct_answer: question_data['correct_answer'],
+    explanation: question_data['explanation']
+  )
 
   question_data['options'].each do |option_data|
-    question.options.find_or_create_by(label: option_data['label']) do |o|
-      o.content = option_data['content']
-    end
+    question.options.create!(
+      label: option_data['label'],
+      content: option_data['content']
+    )
   end
+
+  puts "Processed question #{index + 1}"
 end
 
-puts "Seed data has been successfully loaded into the database."
+puts "Total questions in database: #{Question.count}"
+puts "Total questions imported: #{Question.count}"

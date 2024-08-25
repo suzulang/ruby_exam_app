@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
   def index
     @questions = Question.all
+    Rails.logger.debug "Questions count: #{@questions.count}"
   end
 
   def show
