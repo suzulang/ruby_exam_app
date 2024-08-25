@@ -21,6 +21,7 @@ To run this application, follow these steps:
 2. Set up the database:
    ```
    rails db:migrate
+   rails db:seed
    ```
 
 3. Start the server:
@@ -55,6 +56,7 @@ The application should now be running on `http://localhost:3000`.
 2. データベースをセットアップします：
    ```
    rails db:migrate
+   rails db:seed
    ```
 
 3. サーバーを起動します：
@@ -63,5 +65,3 @@ The application should now be running on `http://localhost:3000`.
    ```
 
 これで、アプリケーションは `http://localhost:3000` で実行されているはずです。
-what happend
-test vscode
