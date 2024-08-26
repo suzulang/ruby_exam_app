@@ -24,10 +24,5 @@ module RubyExamApp
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    config.after_initialize do
-      if ActiveRecord::Base.connection.table_exists?('questions') && Question.count.zero?
-        load Rails.root.join('db/seeds.rb')
-      end
-    end
   end
 end

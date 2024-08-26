@@ -1,0 +1,23 @@
+databases:
+  - name: render_deploy_test
+    databaseName: render_deploy_test
+    plan: free
+
+services:
+  - type: web
+    plan: free
+    name: render_deploy_test
+    env: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec rails server"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: render_deploy_test
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: RAILS_ENV
+        value: production
+      - key: WEB_CONCURRENCY
+        value: 2
